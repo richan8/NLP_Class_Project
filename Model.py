@@ -6,11 +6,18 @@ class Model:
     model = None
     modelType = None
 
-    def __init__(self, modelType = 'nb'):
+    def __init__(self, modelType = 'nb', opt = None):
         if(modelType == 'nb'):
             from sklearn.naive_bayes import MultinomialNB
             self.model = MultinomialNB()
             self.modelType = 'Naive Bayes'
+        if(modelType == 'svm'):
+            from sklearn import svm
+            kernelType = 'rbf' #default of svms
+            if opt:
+                kernel = opt
+            self.model = svm.SVC(kernel=kernelType)
+            self.modelType = 'Support Vector Machine'
     
     def __str__(self):
         return('Model of type: '+self.modelType+' - '+str(type(self.model)))
