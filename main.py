@@ -1,8 +1,13 @@
 from Vectorizer import Vectorizer
 from Model import Model
 from Downloader import Downloader
+from Pipeline import Pipeline
+from Tokenizer import Tokenizer
+from Stemmer import Stemmer
+import pdb
 import numpy as np
 import pandas as pd
+import sys, getopt
 
 ### Global Vars
 dataPath = 'data/sample.csv'
@@ -39,7 +44,7 @@ print('Test Labels:\t',testLabels.shape)
 v = Vectorizer(trainData, mode='TFIDF')
 
 ### Initializing, Training and Validating the model
-clf = Model('svm')
+clf = Model('nb')
 
 def run(vectorizer, model, train_data, train_labels, test_data, test_labels):
     vecTrainData = v.fitTransform(trainData)
@@ -48,4 +53,44 @@ def run(vectorizer, model, train_data, train_labels, test_data, test_labels):
     clf.predict(vecTestData, testLabels, verbose = True)
     return 0
 
-run(v, clf, trainData, trainLabels, testData, testLabels)
+#run(v, clf, trainData, trainLabels, testData, testLabels)
+
+# .\main.py toke,stem,vect,svm,nb
+def main(argv):
+    # construct our pipeline list reading from command line args
+    # still need to figure out best way to pass parameters on command
+    # line
+    transforms = []
+    for transform in argv[0].split(","):
+        if transform == "toke":
+            transforms.append(Tokenizer())
+        elif transform == "stem":
+            transforms.append(Stemmer())
+        elif transform == "vect":
+            transforms.append(Vectorizer(None))
+        elif transform == "svm":
+            transforms.append(Model('svm'))
+        elif transform == "nb":
+            transforms.append(Model('nb'))
+    pipe = Pipeline(transforms)
+
+    # read our data (hardcoded for now)
+    df_republican = pd.read_pickle("./data/republican_comments.pkl")
+    df_democrat = pd.read_pickle("./data/democrat_comments.pkl")
+    X = pd.concat([df_democrat.body, df_republican.body], ignore_index=True)
+    y = pd.concat([df_democrat.subreddit, df_republican.subreddit], ignore_index=True)
+    
+    # split into training and test
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+    # fit our data
+    pipe.fit_transform(X_train, y_train)
+
+    # do the prediction
+    pipe.predict(X_test, y_test)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+    print("done")
+

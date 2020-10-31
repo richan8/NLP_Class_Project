@@ -7,7 +7,7 @@ class Vectorizer:
     vec = None
     mode = None
 
-    def __init__(self, trainDf, mode = 'TFIDF'):
+    def __init__(self, trainData, mode = 'TFIDF'):
         if(mode == 'TFIDF'):
             from sklearn.feature_extraction.text import TfidfVectorizer
             self.vec = TfidfVectorizer()
