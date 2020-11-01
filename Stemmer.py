@@ -33,9 +33,9 @@ class Stemmer:
     def fitTransform(self, data):
         return self.transform(data)
 
-    # data is a list of words
+    # data is a list of documents, which are lists of tokenized words
     def transform(self, data):
         if(self.mode == "Lemmatize"):
-            return([self.stemmer.lemmatize(word) for word in data])
+            return([[self.stemmer.lemmatize(word) for word in doc] for doc in data])
         else:
-            return([self.stemmer.stem(word) for word in data])
+            return([[self.stemmer.stem(word) for word in doc] for doc in data])

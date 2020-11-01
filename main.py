@@ -77,9 +77,10 @@ def main(argv):
     # read our data (hardcoded for now)
     df_republican = pd.read_pickle("./data/republican_comments.pkl")
     df_democrat = pd.read_pickle("./data/democrat_comments.pkl")
+    
     X = pd.concat([df_democrat.body, df_republican.body], ignore_index=True)
     y = pd.concat([df_democrat.subreddit, df_republican.subreddit], ignore_index=True)
-    
+
     # split into training and test
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)

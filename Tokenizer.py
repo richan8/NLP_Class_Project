@@ -38,10 +38,10 @@ class Tokenizer:
         return self.transform(data)
 
     def transform(self, data):
-        tok = self.tok.tokenize(data)
+        tok = [self.tok.tokenize(doc) for doc in data]
         if(self.stopwords):
             tok = self._removeStopwords(tok)
         return tok
 
     def _removeStopwords(self, data):
-        return([word for word in data if word not in self.stopwords])
+        return([[word for word in doc if word not in self.stopwords] for doc in data])
