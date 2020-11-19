@@ -26,7 +26,7 @@ Arguments (comma separated, in order):
         no-verb             -> (No Verbose): Command to not print intermediate steps to terminal.
 
 Example:
-    .\main.py toke,stem,vect,nb
+    python main.py toke,stem,vect,nb
 '''
 
 ### Globals
