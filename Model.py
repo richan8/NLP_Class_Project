@@ -2,6 +2,7 @@ import pdb
 '''
 Models:
     Naive Bayes: nb
+    Support Vector Machine: svm
 '''
 class Model:
     model = None
