@@ -9,42 +9,42 @@ import numpy as np
 import pandas as pd
 import sys, getopt
 
-### Global Vars
-dataPath = 'data/sample.csv'
-trainSplitRatio = 0.8
+# ### Global Vars
+# dataPath = 'data/sample.csv'
+# trainSplitRatio = 0.8
 
-### Loading the data
-'''
-trainData = np.array(['The','brown', 'The fox', 'The quick'])
-trainLabels = np.array([1,0,0,1])
-testData = np.array(['The  quick', 'The brown','brown fox'])
-testLabels = np.array([1,0,0])
-'''
-data = pd.read_csv(dataPath)[['tweet','label']].to_numpy()
-#downloader = Downloader()
-# #data = downloader.fetch_subreddit("democrats")
-#data = downloader.load_pickled_sub("./data/democrats_comments.pkl")
-np.random.shuffle(data)
-n = int(trainSplitRatio * len(data))
-trainData = data[:n,0]
-trainLabels = data[:n,1]
-testData = data[n:,0]
-testLabels = data[n:,1]
+# ### Loading the data
+# '''
+# trainData = np.array(['The','brown', 'The fox', 'The quick'])
+# trainLabels = np.array([1,0,0,1])
+# testData = np.array(['The  quick', 'The brown','brown fox'])
+# testLabels = np.array([1,0,0])
+# '''
+# data = pd.read_csv(dataPath)[['tweet','label']].to_numpy()
+# #downloader = Downloader()
+# # #data = downloader.fetch_subreddit("democrats")
+# #data = downloader.load_pickled_sub("./data/democrats_comments.pkl")
+# np.random.shuffle(data)
+# n = int(trainSplitRatio * len(data))
+# trainData = data[:n,0]
+# trainLabels = data[:n,1]
+# testData = data[n:,0]
+# testLabels = data[n:,1]
 
-print('Train data:\t',trainData.shape)
-#print(trainData[:3])
-print('Train Labels:\t',trainLabels.shape)
-#print(trainLabels[:3])
-print('Test data:\t',testData.shape)
-#print(testData[:3])
-print('Test Labels:\t',testLabels.shape)
-#print(testLabels[:3])
+# print('Train data:\t',trainData.shape)
+# #print(trainData[:3])
+# print('Train Labels:\t',trainLabels.shape)
+# #print(trainLabels[:3])
+# print('Test data:\t',testData.shape)
+# #print(testData[:3])
+# print('Test Labels:\t',testLabels.shape)
+# #print(testLabels[:3])
 
-### Initializing and using our vectorizer
-v = Vectorizer(trainData, mode='TFIDF')
+# ### Initializing and using our vectorizer
+# v = Vectorizer(trainData, mode='TFIDF')
 
-### Initializing, Training and Validating the model
-clf = Model('nb')
+# ### Initializing, Training and Validating the model
+# clf = Model('nb')
 
 def run(vectorizer, model, train_data, train_labels, test_data, test_labels):
     vecTrainData = v.fitTransform(trainData)
@@ -75,11 +75,14 @@ def main(argv):
     pipe = Pipeline(transforms)
 
     # read our data (hardcoded for now)
-    df_republican = pd.read_pickle("./data/republican_comments.pkl")
-    df_democrat = pd.read_pickle("./data/democrat_comments.pkl")
-    
-    X = pd.concat([df_democrat.body, df_republican.body], ignore_index=True)
-    y = pd.concat([df_democrat.subreddit, df_republican.subreddit], ignore_index=True)
+    df0 = pd.read_pickle("./data/democrat_comments.pkl")
+    df1 = pd.read_pickle("./data/republican_comments.pkl")
+    label0 = df0.subreddit.iloc[0]
+    label1 = df1.subreddit.iloc[0]
+
+    # concatenate and clean our data
+    X = pd.concat([df0.body, df1.body], ignore_index=True)
+    y = pd.concat([df0.subreddit, df1.subreddit], ignore_index=True).replace(to_replace=[label0, label1], value=[0, 1])
 
     # split into training and test
     from sklearn.model_selection import train_test_split

@@ -1,3 +1,4 @@
+import pdb
 '''
 Modes:
     Porter
@@ -9,8 +10,9 @@ Modes:
 class Stemmer:
     stemmer = None
     mode = None
+    join = True
 
-    def __init__(self, mode = 'Porter'):
+    def __init__(self, mode = 'Porter', join = True):
         if(mode == 'Porter'):
             from nltk.stem import PorterStemmer
             self.stemmer = PorterStemmer()
@@ -25,17 +27,27 @@ class Stemmer:
         elif(mode == 'Regexp'):
             raise Exception("TODO")
         self.mode = mode
+        self.join = join
 
     def __str__(self):
         return('Custom Vectorizer using '+self.mode+' Vectorization')
 
-    # data is a list of words
+    # data is a list of strings or a list of list of strings
+    # returns either a list of words or a joined list
     def fitTransform(self, data):
         return self.transform(data)
 
-    # data is a list of documents, which are lists of tokenized words
+
+    # data is a list of list of words
+    # returns either a list of words or a joined list
     def transform(self, data):
+        # for each list of words in data list, lemmatize/stem each word
         if(self.mode == "Lemmatize"):
-            return([[self.stemmer.lemmatize(word) for word in doc] for doc in data])
+            result = [[self.stemmer.lemmatize(word) for word in doc] for doc in data]
         else:
-            return([[self.stemmer.stem(word) for word in doc] for doc in data])
+            result = [[self.stemmer.stem(word) for word in doc] for doc in data]
+        
+        # if necessary join words in each list of words in result list
+        if (self.join):
+            result = [' '.join(doc) for doc in result]
+        return result
