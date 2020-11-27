@@ -31,13 +31,16 @@ Example:
 
 ### Globals
 verbose = True
+norm = False
 
+'''
 def run(vectorizer, model, train_data, train_labels, test_data, test_labels):
     vecTrainData = v.fitTransform(trainData)
     vecTestData = v.transform(testData)
     clf.fit(vecTrainData, trainLabels)
     clf.predict(vecTestData, testLabels, verbose = True)
     return 0
+'''
 
 def main(argv):
     # construct our pipeline list reading from command line args
@@ -45,6 +48,7 @@ def main(argv):
     # line
 
     global verbose
+    global norm
     split = None
 
     transforms = []
@@ -53,23 +57,41 @@ def main(argv):
             transforms.append(Tokenizer())
         elif arg == "stem":
             transforms.append(Stemmer())
+        elif arg == "stem-porter":
+            transforms.append(Stemmer(mode = 'Porter'))
+        elif arg == "stem-lancaster":
+            transforms.append(Stemmer(mode = 'Lancaster'))
+        elif arg == "stem-lemmatize":
+            transforms.append(Stemmer(mode = 'Lemmatize'))
         elif arg == "vect":
-            transforms.append(Vectorizer(None))
+            transforms.append(Vectorizer())
+        elif arg == "vect-tfidf":
+            transforms.append(Vectorizer(mode='TFIDF'))
+        elif arg == "vect-count":
+            transforms.append(Vectorizer(mode='Count'))
+        elif arg == "vect-lda":
+            transforms.append(Vectorizer(mode='LDA', ldaSplits=10))
         elif arg == "svm":
             transforms.append(Model('svm'))
         elif arg == "nb":
             transforms.append(Model('nb'))
+        elif arg == "lr":
+            transforms.append(Model('lr'))
+        elif arg == "nn":
+            transforms.append(Model('nn', inputDim = 10)) #Configured for LDA
+        elif arg == "norm":
+            norm = True
         elif arg == "no-verb":
             verbose =  False
         elif arg == "split-sentences":
             split = "sentences"
 
-    pipe = Pipeline(transforms)
+    pipe = Pipeline(transforms, norm=norm)
 
     # read our data (hardcoded for now)
-    df0 = pd.read_pickle("./data/democrat_comments.pkl")
-    df1 = pd.read_pickle("./data/republican_comments.pkl")
-    
+    df0 = pd.read_pickle("./data/democrat_comments.pkl")#.sample(frac = 0.01) # DEBUG ONLY
+    df1 = pd.read_pickle("./data/republican_comments.pkl")#.sample(frac = 0.01) # DEBUG ONLY
+
     if(split is not None):
         if(verbose):
             print('Splitting Democrat comments')
@@ -100,4 +122,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-    print("done")

@@ -1,0 +1,65 @@
+Config: toke,stem-lemmatize,vect-lda,nb | LDA-N = 5
+	Accuracy of the model:   0.553
+	Precision wrt. class 0:  0.432
+	Recall wrt. class 0:     0.564
+	F1 Score wrt. class 0:   0.489
+
+Config: toke,stem-lemmatize,vect-lda,lr | LDA-N = 5
+	Accuracy of the model:   0.557
+	Precision wrt. class 0:  0.513
+	Recall wrt. class 0:     0.557
+	F1 Score wrt. class 0:   0.534
+
+Config: toke,stem-lemmatize,vect-lda,norm,lr | LDA-N = 5
+	Accuracy of the model:   0.602
+	Precision wrt. class 0:  0.729
+	Recall wrt. class 0:     0.578
+	F1 Score wrt. class 0:   0.645
+
+Config: toke,stem-lemmatize,vect-lda,norm,lr | LDA-N = 25
+	Accuracy of the model:   0.624
+	Precision wrt. class 0:  0.538
+	Recall wrt. class 0:     0.644
+	F1 Score wrt. class 0:   0.586
+
+Config: toke,stem,split-sentences,nb
+	Accuracy of the model:   0.672
+	Precision wrt. class 0:  0.629
+	Recall wrt. class 0:     0.664
+	F1 Score wrt. class 0:   0.646
+
+Config: toke,stem,vect-count,nb
+	Accuracy of the model:   0.682
+	Precision wrt. class 0:  0.700
+	Recall wrt. class 0:     0.672
+	F1 Score wrt. class 0:   0.686
+
+Config: toke,stem-lancaster,vect-tfidf,nb
+	Accuracy of the model:   0.687
+	Precision wrt. class 0:  0.691
+	Recall wrt. class 0:     0.682
+	F1 Score wrt. class 0:   0.686
+
+Config: toke,stem,vect-tfidf,nb
+	Accuracy of the model:   0.693
+	Precision wrt. class 0:  0.704
+	Recall wrt. class 0:     0.684
+	F1 Score wrt. class 0:   0.694
+
+Config: toke,stem-lemmatize,vect-tfidf,nb
+	Accuracy of the model:   0.696
+	Precision wrt. class 0:  0.711
+	Recall wrt. class 0:     0.686
+	F1 Score wrt. class 0:   0.698
+
+Config: toke,stem-lemmatize,vect-tfidf,lr
+	Accuracy of the model:   0.701
+	Precision wrt. class 0:  0.702
+	Recall wrt. class 0:     0.690
+	F1 Score wrt. class 0:   0.696
+
+To Discuss:
+	Save/Load Model
+	Make the predicition application (small web-app ?)
+	Make a weightage system for high scoring comments and/or filter the dataset by comment score
+	The Paper
